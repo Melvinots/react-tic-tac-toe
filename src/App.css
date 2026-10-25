@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap');
+
+:root {
+  --bg: #05060f;
+  --panel: rgba(10, 14, 32, 0.75);
+  --text: #d6f6ff;
+  --muted: #6b7fa3;
+  --cyan: #00f0ff;
+  --magenta: #ff2bd6;
+  --green: #39ff88;
+  --border: rgba(0, 240, 255, 0.35);
+  --font: 'Orbitron', 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: var(--font);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 20% 15%, rgba(255, 43, 214, 0.18), transparent 40%),
+    radial-gradient(circle at 80% 85%, rgba(0, 240, 255, 0.18), transparent 40%),
+    linear-gradient(rgba(0, 240, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.07) 1px, transparent 1px);
+  background-size: auto, auto, 40px 40px, 40px 40px;
+  background-attachment: fixed;
+}
+
+/* Subtle scanlines over everything */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 3px,
+    rgba(0, 0, 0, 0.18) 4px
+  );
+  z-index: 10;
+}
+
+/* Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--cyan);
+  text-shadow:
+    0 0 6px var(--cyan),
+    0 0 20px var(--cyan),
+    3px 3px 0 var(--magenta);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.subtitle {
+  margin: 8px 0 32px;
+  color: var(--magenta);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  text-shadow: 0 0 8px var(--magenta);
+}
+
+@keyframes pulse {
+  0%, 100% { text-shadow: 0 0 6px var(--cyan), 0 0 20px var(--cyan), 3px 3px 0 var(--magenta); }
+  50%      { text-shadow: 0 0 3px var(--cyan), 0 0 10px var(--cyan), 3px 3px 0 var(--magenta); }
+}
+
+.game {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.game-board,
+.game-info {
+  flex: none;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 18px rgba(0, 240, 255, 0.15),
+    inset 0 0 18px rgba(0, 240, 255, 0.05);
+}
+
+/* Status */
+.status {
+  margin-bottom: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.status.winner {
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green);
+}
+
+/* Board */
+.board-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.board-row:last-child {
+  margin-bottom: 0;
+}
+
+.square {
+  width: 88px;
+  height: 88px;
+  padding: 0;
+  background: rgba(0, 240, 255, 0.04);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.square:hover {
+  background: rgba(0, 240, 255, 0.12);
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
+}
+
+.square:active {
+  transform: scale(0.95);
+}
+
+.square.x {
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--cyan);
+}
+
+.square.o {
+  color: var(--magenta);
+  text-shadow: 0 0 12px var(--magenta);
+}
+
+/* History */
+.game-info {
+  width: 240px;
+}
+
+.game-info h2 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  text-shadow: 0 0 8px var(--magenta);
+}
+
+.game-info ol {
+  margin: 0;
+  padding-left: 24px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.game-info li button {
+  width: 100%;
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.game-info li button:hover {
+  background: rgba(0, 240, 255, 0.12);
+}
+
+.game-info li .current-move {
+  display: block;
+  padding: 6px 12px;
+  border: 1px solid var(--magenta);
+  border-radius: 6px;
+  background: rgba(255, 43, 214, 0.18);
+  color: #fff;
+  font-size: 0.75rem;
+  box-shadow: 0 0 10px rgba(255, 43, 214, 0.5);
+}
